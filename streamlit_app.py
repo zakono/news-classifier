@@ -3,24 +3,21 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import plotly.graph_objects as go
 
-# Настройка страницы
 st.set_page_config(
     page_title="News Classifier",
     page_icon="📰",
     layout="wide"
 )
 
-# Заголовок
 st.title("📰 News Classification Demo")
 st.markdown("*Automatic categorization of news articles using BERT*")
 st.markdown("---")
 
-# Загрузка модели с кэшированием
 @st.cache_resource
 def load_model():
-    """Загружает модель один раз и кэширует"""
+  
     try:
-        # Попробовать загрузить локальную модель
+
         model = AutoModelForSequenceClassification.from_pretrained('final_model_bert')
         tokenizer = AutoTokenizer.from_pretrained('final_model_bert')
         st.success("✅ Local model loaded successfully!")
@@ -37,7 +34,6 @@ def load_model():
     
     return model, tokenizer, device
 
-# Загрузка модели
 with st.spinner('Loading model...'):
     model, tokenizer, device = load_model()
 
@@ -46,7 +42,7 @@ label_colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A']
 label_emojis = ['🌍', '⚽', '💼', '🔬']
 
 def classify_news(text):
-    """Классификация текста"""
+
     inputs = tokenizer(text, return_tensors='pt', truncation=True, max_length=256).to(device)
     
     with torch.no_grad():
@@ -60,7 +56,6 @@ def classify_news(text):
     
     return pred_label, confidence, all_probs
 
-# Sidebar с примерами
 st.sidebar.header("📝 Example Articles")
 st.sidebar.markdown("Click to try:")
 
@@ -77,13 +72,11 @@ selected_example = st.sidebar.radio("Select example:", list(examples.keys()))
 if st.sidebar.button("📋 Use This Example"):
     st.session_state.input_text = examples[selected_example]
 
-# Основной интерфейс
 col1, col2 = st.columns([2, 1])
 
 with col1:
     st.subheader("Enter News Article")
-    
-    # Текстовое поле
+
     default_text = st.session_state.get('input_text', '')
     user_input = st.text_area(
         "Paste or type your news article here:",
@@ -99,7 +92,6 @@ with col2:
     for emoji, label in zip(label_emojis, label_names):
         st.markdown(f"{emoji} **{label}**")
 
-# Классификация
 if classify_button and user_input.strip():
     if len(user_input.strip()) < 10:
         st.error("⚠️ Please enter at least 10 characters")
@@ -187,7 +179,7 @@ This application uses a **BERT-based model** fine-tuned on the AG News dataset t
 
 **Model Performance**: ~94% accuracy on test set
 
-**Note**: Model may make errors on ambiguous articles, especially between Business and Sci/Tech categories.
+**Note**: Model may make errors on ambiguous articles, especially between World and Sports categories.
 """)
 
 # Статистика в sidebar
