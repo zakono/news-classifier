@@ -22,11 +22,10 @@ def load_model():
         tokenizer = AutoTokenizer.from_pretrained('final_model_bert')
         st.success("✅ Local model loaded successfully!")
     except:
-        # Если локальной нет, использовать предобученную из HuggingFace
-        st.warning("⚠️ Local model not found. Loading pre-trained model from HuggingFace...")
+       
         model = AutoModelForSequenceClassification.from_pretrained('fabriceyhc/bert-base-uncased-ag_news')
         tokenizer = AutoTokenizer.from_pretrained('fabriceyhc/bert-base-uncased-ag_news')
-        st.success("✅ Pre-trained model loaded!")
+       
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
