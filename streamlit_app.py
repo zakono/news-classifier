@@ -189,5 +189,5 @@ st.sidebar.info(f"""
 **Parameters**: 110M  
 **Training**: AG News dataset  
 **Accuracy**: 94.0%  
-**Device**: {device}
+
 """)
